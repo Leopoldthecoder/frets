@@ -1,0 +1,2 @@
+# frets
+🎼Learning guitar scales
