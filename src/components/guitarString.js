@@ -5,17 +5,14 @@ class GuitarString extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      scales: [{
-        fret: Math.floor(Math.random() * 15),
-        note: props.emptyNote
-      }]
+      scales: []
     };
-    this.handleClick = this.handleClick.bind(this);
   }
 
-  handleClick(i) {
-    this.props.onStringClick(i)
-  }
+  handleClick = (i, scale) => {
+    if (scale && scale.note === 1) return;
+    this.props.onStringClick(i);
+  };
 
   componentWillReceiveProps({ emptyNote }) {
     let index = Math.floor(emptyNote) - 1;
@@ -39,7 +36,7 @@ class GuitarString extends Component {
           accumulator.push({
             fret: i,
             note: curr
-          })
+          });
         }
         return accumulator;
       }, [])
@@ -51,7 +48,7 @@ class GuitarString extends Component {
     for (let i = 0; i <= 15; i++) {
       const scale = this.state.scales.find(scale => scale.fret === i);
       segments.push(
-        <div className="string-segment" key={i} onClick={e => this.handleClick(i, e)}>
+        <div className="string-segment" key={i} onClick={e => this.handleClick(i, scale, e)}>
           {
             scale
               ? <span
@@ -61,7 +58,7 @@ class GuitarString extends Component {
               : null
           }
         </div>
-      )
+      );
     }
     return (
       <div className={`string${this.props.isSixth ? ' is-sixth' : ''}`}>

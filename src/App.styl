@@ -1,13 +1,24 @@
 .App
   text-align center
 
-.string-container
+.string-container, .fret-index
   width 75%
   margin 0 auto
   display flex
 
-  .string-note
-    width 20px
+.fret-index
+  margin-top 15px
+  height 40px
+  padding-left calc(30px + 4.65%)
+  box-sizing border-box
+
+  span
+    flex 1
     color #cacaca
-    line-height 40px
-    margin-right 10px
+    font-size 13px
+
+.string-note
+  width 20px
+  color #cacaca
+  line-height 40px
+  margin-right 10px
