@@ -5,19 +5,23 @@
 .string-container, .fret-index
   width 95%
   max-width 1300px
+  min-width 750px
   margin 0 auto
   display flex
 
 .fret-index
   margin-top 15px
   height 40px
-  padding-left calc(30px + 4.65%)
+  padding-left 30px
   box-sizing border-box
 
   span
     flex 1
     color #cacaca
     font-size 13px
+
+    &:first-child
+      visibility hidden
 
 .string-note
   width 20px

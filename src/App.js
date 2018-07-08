@@ -87,7 +87,7 @@ class App extends Component {
       </div>
     ));
     const frets = [];
-    for (let i = 1; i <= 15; i++) {
+    for (let i = 0; i <= 15; i++) {
       frets.push(<span key={i}>{i}</span>);
     }
     return (
