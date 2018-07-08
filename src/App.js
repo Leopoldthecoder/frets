@@ -1,16 +1,8 @@
 import React, { Component } from 'react';
 import GuitarString from './components/guitarString';
+import { EMPTY_SCALES, NOTE_DIFFS, STRING_DIFFS } from './consts';
+import { getValidValue } from './utils';
 import './App.styl';
-
-const EMPTY_SCALES = ['E', 'B', 'G', 'D', 'A', 'E'];
-const STRING_DIFFS = [5, 4, 5, 5, 5];
-const NOTE_DIFFS = [2, 2, 1, 2, 2, 2, 1];
-const getValidNote = note => {
-  while (note < 1 || note > 7) {
-    note += note < 1 ? 7 : -7;
-  }
-  return note;
-};
 
 const getNote = (note, distance) => {
   let fretCount = 0;
@@ -19,29 +11,46 @@ const getNote = (note, distance) => {
 
   while (fretCount < Math.abs(distance)) {
     if (Math.floor(index) === index) {
-      while (index < 0 || index > 6) {
-        index += index < 0 ? 7 : -7;
-      }
+      index = getValidValue(0, 6, index);
       fretCount += NOTE_DIFFS[index];
-      diff += distance > 0 ? 1 : -1;
-      index += distance > 0 ? 1 : -1;
+      const increment = distance > 0 ? 1 : -1;
+      diff += increment;
+      index += increment;
     } else {
       fretCount += 1;
-      diff += distance > 0 ? 0.5 : -0.5;
-      index += distance > 0 ? 0.5 : -0.5;
+      const increment = distance > 0 ? 0.5 : -0.5;
+      diff += increment;
+      index += increment;
     }
   }
   if (fretCount !== Math.abs(distance)) {
     diff += distance > 0 ? -0.5 : 0.5;
   }
-  return getValidNote(note + diff);
+  return getValidValue(1, 7, note + diff);
+};
+
+const getMajor = (stringNum, fretNum) => {
+  const code = EMPTY_SCALES[stringNum].charCodeAt(0);
+  let fretCount = 0;
+  let index = getValidValue(0, 6, code - 'C'.charCodeAt(0));
+  let diff = 0;
+  while (fretCount < fretNum) {
+    index = getValidValue(0, 6, index);
+    fretCount += NOTE_DIFFS[index];
+    index++;
+    diff++;
+  }
+  const isSharp = fretCount > fretNum;
+  const major = String.fromCharCode(getValidValue(65, 71, code + diff - (isSharp ? 1 : 0)));
+  return (isSharp ? '<sup>#</sup>' : '') + major;
 };
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      emptyNotes: [3, 7, 5, 2, 6, 3]
+      emptyNotes: [3, 7, 5, 2, 6, 3],
+      major: 'C'
     };
   }
 
@@ -57,12 +66,8 @@ class App extends Component {
     }
 
     this.setState({
-      emptyNotes: emptyNotes.map(note => {
-        while(note < 1 || note > 7) {
-          note += note < 1 ? 7 : -7;
-        }
-        return note;
-      })
+      emptyNotes: emptyNotes.map(note => getValidValue(1, 7, note)),
+      major: getMajor(stringNum, fretNum)
     });
   };
 
@@ -91,6 +96,10 @@ class App extends Component {
         <div className="fret-index">
           {frets}
         </div>
+        <span
+          className="major"
+          dangerouslySetInnerHTML={{ __html: `1 = ${this.state.major}`}}>
+        </span>
       </div>
     );
   }

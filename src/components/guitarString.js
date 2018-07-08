@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { NOTE_DIFFS } from '../consts';
+import { getValidValue } from '../utils';
 import './guitarString.styl';
 
 class GuitarString extends Component {
@@ -17,9 +19,8 @@ class GuitarString extends Component {
   componentWillReceiveProps({ emptyNote }) {
     let index = Math.floor(emptyNote) - 1;
     const scales = [emptyNote];
-    const NOTE_DIFFS = [0.5, 0.5, 1, 0.5, 0.5, 0.5, 1];
     for (let i = 1; i <= 15; i++) {
-      scales.push(scales[i - 1] + NOTE_DIFFS[index]);
+      scales.push(scales[i - 1] + 1 / NOTE_DIFFS[index]);
       if (Math.floor(scales[i]) > Math.floor(scales[i - 1])) {
         index++;
       }
@@ -30,12 +31,9 @@ class GuitarString extends Component {
     this.setState({
       scales: scales.reduce((accumulator, curr, i) => {
         if (Math.floor(curr) === curr) {
-          while (curr > 7 || curr < 1) {
-            curr += curr > 7 ? -7 : 7;
-          }
           accumulator.push({
             fret: i,
-            note: curr
+            note: getValidValue(1, 7, curr)
           });
         }
         return accumulator;
