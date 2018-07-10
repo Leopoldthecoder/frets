@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, StrictMode } from 'react';
 import GuitarString from './components/guitarString';
 import { EMPTY_SCALES, NOTE_DIFFS, STRING_DIFFS } from './consts';
 import { getValidValue } from './utils';
@@ -91,16 +91,18 @@ class App extends Component {
       frets.push(<span key={i}>{i}</span>);
     }
     return (
-      <div className="App">
-        {strings}
-        <div className="fret-index">
-          {frets}
-        </div>
-        <span
-          className="major"
-          dangerouslySetInnerHTML={{ __html: `1 = ${this.state.major}`}}>
+      <StrictMode>
+        <div className="App">
+          {strings}
+          <div className="fret-index">
+            {frets}
+          </div>
+          <span
+            className="major"
+            dangerouslySetInnerHTML={{ __html: `1 = ${this.state.major}`}}>
         </span>
-      </div>
+        </div>
+      </StrictMode>
     );
   }
 }
