@@ -22,7 +22,7 @@ class GuitarString extends Component {
     this.props.onStringClick(i);
   };
 
-  componentWillReceiveProps({ emptyNote }) {
+  static getDerivedStateFromProps({ emptyNote }) {
     let index = Math.floor(emptyNote) - 1;
     const scales = [emptyNote];
     for (let i = 1; i <= 15; i++) {
@@ -34,7 +34,7 @@ class GuitarString extends Component {
         index -= 7;
       }
     }
-    this.setState({
+    return {
       scales: scales.reduce((accumulator, curr, i) => {
         if (Math.floor(curr) === curr) {
           accumulator.push({
@@ -44,7 +44,7 @@ class GuitarString extends Component {
         }
         return accumulator;
       }, [])
-    })
+    };
   }
 
   render() {
