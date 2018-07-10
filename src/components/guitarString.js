@@ -11,6 +11,12 @@ class GuitarString extends Component {
     };
   }
 
+  static defaultProps = {
+    emptyNote: 1,
+    isSixth: false,
+    onStringClick() {}
+  };
+
   handleClick = (i, scale) => {
     if (scale && scale.note === 1) return;
     this.props.onStringClick(i);
@@ -65,11 +71,5 @@ class GuitarString extends Component {
     );
   }
 }
-
-GuitarString.defaultProps = {
-  emptyNote: 1,
-  isSixth: false,
-  onStringClick() {}
-};
 
 export default GuitarString;
